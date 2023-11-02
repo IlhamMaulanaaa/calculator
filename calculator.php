@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mac Calculator</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
   <style>
     body {
       display: flex;
@@ -126,124 +127,110 @@
     .border-bottom-right-radius-10 {
       border-bottom-right-radius: 10px;
     }
+    .historycal{
+      margin: 20px 0px 0px 20px;
+    }
+    .history-calc::-webkit-scrollbar{
+      max-height: 200px; /* Adjust the desired maximum height */  
+      overflow-y: hidden;
+    }
   </style>
 </head>
 
 <body>
   <div id="calculator" class="border-radius-10 bg-gray">
-    <div id="header" class="flex bg-gray px-5 border-radius-10 py-5">
-      <div class="circle red h-15 mr-5"></div>
-      <div class="circle yellow h-15 mr-5"></div>
-      <div class="circle green h-15 mr-5"></div>
+      <div class="history-calc">
     </div>
-    <div id="output" class="bg-gray text-right py-5">
-      <input type="text" class="result font-size-50 text-white system-font pr-10" id="display" value="0" max="8">
+    <div id="output" class="bg-gray text-right py-1">
+      <input type="text" class="result font-size-50 text-white system-font pr-10" id="display">
+      <input type="text" class="result font-size-50 text-white system-font pr-10" id="preview">
     </div>
     <div id="buttons">
       <div class="flex justify-content-between">
         <button class="btn btn-dark-gray text-white" id="clearAll">AC</button>
         <button class="btn btn-dark-gray text-white" id="plus-minus">+/-</button>
-        <button class="btn btn-dark-gray operator text-white">%</button>
-        <button class="btn btn-orange operator text-white">/</button>
+        <button class="btn btn-dark-gray calc-btn oprator text-white">%</button>
+        <button class="btn btn-orange calc-btn oprator text-white">/</button>
       </div>
       <div class="flex justify-content-between">
-        <button class="btn btn-light-gray number text-white">7</button>
-        <button class="btn btn-light-gray number text-white">8</button>
-        <button class="btn btn-light-gray number text-white">9</button>
-        <button class="btn btn-orange operator text-white">x</button>
+        <button class="btn btn-light-gray calc-btn text-white">7</button>
+        <button class="btn btn-light-gray calc-btn text-white">8</button>
+        <button class="btn btn-light-gray calc-btn text-white">9</button>
+        <button class="btn btn-orange calc-btn oprator text-white">x</button>
       </div>
       <div class="flex justify-content-between">
-        <button class="btn btn-light-gray number text-white">4</button>
-        <button class="btn btn-light-gray number text-white">5</button>
-        <button class="btn btn-light-gray number text-white">6</button>
-        <button class="btn btn-orange operator text-white">-</button>
+        <button class="btn btn-light-gray calc-btn text-white">4</button>
+        <button class="btn btn-light-gray calc-btn text-white">5</button>
+        <button class="btn btn-light-gray calc-btn text-white">6</button>
+        <button class="btn btn-orange calc-btn oprator text-white">-</button>
       </div>
       <div class="flex justify-content-between">
-        <button class="btn btn-light-gray number text-white one">1</button>
-        <button class="btn btn-light-gray number text-white two">2</button>
-        <button class="btn btn-light-gray number text-white">3</button>
-        <button class="btn btn-orange operator text-white">+</button>
+        <button class="btn btn-light-gray calc-btn text-white one">1</button>
+        <button class="btn btn-light-gray calc-btn text-white two">2</button>
+        <button class="btn btn-light-gray calc-btn text-white">3</button>
+        <button class="btn btn-orange calc-btn oprator text-white">+</button>
       </div>
       <div class="flex justify-content-between">
         <div class="w-100">
-          <button class="btn btn-light-gray number text-white border-bottom-left-radius-10">0</button>
+          <button class="btn btn-light-gray calc-btn text-white border-bottom-left-radius-10">0</button>
         </div>
         <div class="flex w-100">
-          <button class="btn btn-light-gray decimal text-white">.</button>
+          <button class="btn btn-light-gray calc-btn text-white">.</button>
           <button class="btn btn-orange text-white border-bottom-right-radius-10" id="calculate">=</button>
         </div>
       </div>
     </div>
   </div>
+  <!-- <img src="calculator.jpeg" style="height: 550px;" alt=""> -->
+
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
-    $(document).ready(function () {
-
-      let userInput = '';
-      let opratorInput = '';
-      let memory = 0;
-
-      function display() {
-        $("#display").val(userInput);
-      }
-
-      $(".number").click(function () {
-        userInput += $(this).text();
-        display();
-      });
-
-      $(".operator").click(function () {
-        if (userInput !== '') {
-          memory = parseFloat(userInput);
-          userInput = '';
-          opratorInput = $(this).text();
-          display();
-        }
-      });
-
-      $(".decimal").click(function () {
-        userInput += $(this).text();
-        display();
-      });
-
-      $("#plus-minus").click(function () {
-        userInput = parseFloat(userInput * -1).toString();
-        display();
-      });
-
-      $("#clearAll").click(function () {
-        userInput = '';
-        opratorInput = '';
-        memory = 0;
-        display();
-      });
-
-      $("#calculate").click(function () {
-        if (userInput !== '') {
-          let input2 = parseFloat(userInput);
-          switch (opratorInput) {
-            case "+":
-              memory += input2;
-              break;
-            case "-":
-              memory -= input2;
-              break;
-            case "x":
-              memory *= input2;
-              break;
-            case "/":
-              memory /= input2;
-              break;
-            case "%":
-              memory %= input2;
-              break;
+    <script>
+      $(document).ready(function(){
+        // Function to update #preview in real-time
+        function updatePreview() {
+          let data = $('#display').val();
+        
+          if (data.includes("%")) {
+            data = data.replace("%", "/100");
           }
-          userInput = memory;
-          display();
+          if (data.includes("x")) {
+            data = data.replace("x", "*");
+          }
+          try {
+            let result = eval(data);
+            $('#preview').val(result);
+          } catch (error) {
+            $('#preview').val("Invalid input");
+          }
         }
+        // untuk menampilkan input atau hasil input 
+        $('.calc-btn').on('click', function(){
+          $('#display').val($('#display').val() + $(this).html());
+          updatePreview();
+        });
+        $('#calculate').on('click', function(){
+          let data = $('#display').val();
+          if(data.includes("x")){
+            data = data.replace("x", "*");
+          }
+          $(".history-calc").append("<div class='historycal'><h3 class='sum text-light'>" + data + "</h3><p class='text-light'>" + eval(data) + "</p></div><hr class='text-white'>");
+          updatePreview();
+          // $("#preview").hide();
+        });
+        $(".history-calc").on("click", ".sum", function(){
+          console.log("hello world");
+          $("#display").val($(this).html());
+          updatePreview();
+        });
+        $("#clearAll").on("click", function(){
+          $("#display").val("");
+          $("#preview").val("");
+        });
+        // realtime calculate from #display to #preview
+        $("#display").on("input", updatePreview)
       });
-    });
-  </script>
-</body>
+    </script>
 
+
+</body>
 </html>
