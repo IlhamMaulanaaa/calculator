@@ -213,8 +213,11 @@
           if(data.includes("x")){
             data = data.replace("x", "*");
           }
-          $(".history-calc").append("<div class='historycal'><h3 class='sum text-light'>" + data + "</h3><p class='text-light'>" + eval(data) + "</p></div><hr class='text-white'>");
+          if(data !== $(".sum").html()){
+            $(".history-calc").append("<div class='historycal'><h3 class='sum text-light'>" + data + "</h3><p class='text-light'>" + eval(data) + "</p></div><hr class='text-white'>");
+          }
           updatePreview();
+          data = $('#display').val("");
           // $("#preview").hide();
         });
         $(".history-calc").on("click", ".sum", function(){
