@@ -162,7 +162,7 @@
     <div id="calculator" class="border-radius-10 bg-gray">
       <div id="output" class="bg-gray text-right py-1">
         <input type="text" class="result font-size-50 text-white system-font pr-10" id="display">
-        <h3 type="text" class="result font-size-50 text-white system-font pr-10" id="preview"></h3>
+        <h3 type="text" class="result font-size-50 text-white system-font pr-10" maxlength="12" id="preview"></h3>
       </div>
       <div id="buttons">
         <div class="flex justify-content-between">
@@ -273,6 +273,8 @@
                   {
                     let result = eval(data);
                     $("#preview").text("=" + result);
+                  }else{
+                    $("#preview").text("");
                   }
                 } catch (error) 
                 {
@@ -309,7 +311,7 @@
           updatePreview();
         });
         
-        $(".calc-btn").click(function () 
+        $(".calc-btn").on("click", function () 
         {
           data    = $("#display").val();
           if (input) 
@@ -329,9 +331,10 @@
           let buttonValue = $(this).html();
           let currentDisplayValue = $("#display").val();
 
-          if (buttonValue === "." && currentDisplayValue.indexOf(".") !== -1) 
+          if (buttonValue === "." && data.indexOf(".") === -1) 
           {
-            return;
+            data += ".";
+            updatePreview();
           }
 
           if ($(this).hasClass("oprator") && currentDisplayValue !== "") 
@@ -355,7 +358,7 @@
         {
           data = $("#display").val().slice(0, - 1)
           $("#display").val(data);
-          $("#preview").eval(data);
+
           updatePreview();
         });
 
