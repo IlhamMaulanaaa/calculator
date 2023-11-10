@@ -24,6 +24,10 @@
         background-color: rgb(91, 86, 82);
       }
 
+      #display{
+        font-size: 42px;
+      }
+
       #calculator {
         width: 240px;
         height: 100%;
@@ -86,10 +90,6 @@
         color: white;
       }
 
-      .font-size-50 {
-        font-size: 42px;
-      }
-
       .system-font {
         font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         font-weight: 200;
@@ -139,13 +139,6 @@
         overflow-y: hidden;
       }
 
-      #display {
-        text-align: right; 
-        /* overflow: hidden; */
-      /* Mengatur urutan teks dari kanan ke kiri */
-        direction: rtl; 
-      } 
-
       #preview {
         padding: 2px 8px;
         font-size: 28px;
@@ -161,13 +154,14 @@
   <body>
     <div id="calculator" class="border-radius-10 bg-gray">
       <div id="output" class="bg-gray text-right py-1">
-        <input type="text" class="result font-size-50 text-white system-font pr-10" id="display">
-        <h3 type="text" class="result font-size-50 text-white system-font pr-10" maxlength="12" id="preview"></h3>
+        <input type="text" class="result text-white system-font pr-10" id="display">
+        <h3 type="text" class="result text-white system-font pr-10" maxlength="12" id="preview"></h3>
       </div>
       <div id="buttons">
         <div class="flex justify-content-between">
           <button class="btn btn-dark-gray text-white" id="clearAll">AC</button>
           <button class="btn btn-dark-gray text-white" id="backspace"><--</button>
+
               <button class="btn btn-dark-gray calc-btn oprator text-white">%</button>
               <button class="btn btn-orange calc-btn oprator text-white">/</button>
         </div>
@@ -194,7 +188,7 @@
             <button class="btn btn-light-gray calc-btn text-white border-bottom-left-radius-10">0</button>
           </div>
           <div class="flex w-100">
-            <button class="btn btn-light-gray calc-btn decimal text-white">.</button>
+            <button class="btn btn-light-gray calc-btn oprator text-white">.</button>
             <button class="btn btn-orange text-white border-bottom-right-radius-10" id="calculate">=</button>
           </div>
         </div>
@@ -202,7 +196,7 @@
       <div class="history-calc d-flex flex-column-reverse">
       </div>
     </div>
-    <img src="rumus menghitung persen.jpeg" style="height: 542px;" alt="">
+    <!-- <img src="rumus menghitung persen.jpeg" style="height: 542px;" alt=""> -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
       $(document).ready(function () {
@@ -217,16 +211,17 @@
           {
             data = data.replace(/x/g, "*");
           }
-          
           if (matches) 
           {
             try
             {
               let data = $("#display").val();
-              if (data.includes("x")) {
+              if (data.includes("x")) 
+              {
                 data = data.replace(/x/g, "*");
               }
-              if (data.includes("%")) {
+              if (data.includes("%")) 
+              {
                 data = data.replace("%", "/100");
               }
               if (data !== "") 
@@ -250,18 +245,15 @@
                   let angka           = [];
                   let operator        = [];
                   let hasilSebelumnya = data.replace(matches, "");
-
                   for (let match of matches)
                   {
                     let angkaDariPersen = /\d+/.exec(match);
                     angka.push(parseFloat(angkaDariPersen));
-
                     let opratorDariPersen = /[-+*\/]/.exec(match);
                     operator.push(opratorDariPersen[0]);
                   }
-                 
+                  console.log(angka);
                   let hasilPenjumlahan = eval(eval(hasilSebelumnya) + operator[0] + (eval(hasilSebelumnya) / 100 * angka[0]));
-
                   hasilSebelumnya = hasilPenjumlahan;
                   $("#preview").text("=" + hasilPenjumlahan);
                 }
@@ -273,12 +265,13 @@
                   {
                     let result = eval(data);
                     $("#preview").text("=" + result);
-                  }else{
+                  }else
+                  {
                     $("#preview").text("");
                   }
                 } catch (error) 
                 {
-                    }
+                }
               }
             } catch (error) 
             {
@@ -286,16 +279,13 @@
           }
         }
 
-
         $("#calculate").click(function () 
         {
           let data = $('#display').val();
-          
           if (data.trim() !== "") 
           {
-            $("#display").css("font-size", "28px");
+            $("#display").css("font-size", "42px");
             $("#preview").css({ "font-size": "42px", "font-weight": "500" });
-            
             updatePreview();    
             if ($("#display").val().trim() === "") 
             {
@@ -310,12 +300,32 @@
           $("#display").val($(this).html().toString());
           updatePreview();
         });
-        
+
+          $("#display").on("input, click", function(){
+            if($("#display").val().length > 8){
+              fontSize = "42px";
+              $("#display").css("font-size", fontSize);
+            }
+          });
+
         $(".calc-btn").on("click", function () 
         {
-          data    = $("#display").val();
+          console.log($("#display").val().length);
+          if($("#display").val().length > 7){
+              fontSize = "32px";
+              console.log(fontSize);
+
+              $("#display").css("font-size", fontSize );
+            }else if($("#display").val().length > 11){
+              fontSize = "32px";
+              console.log(fontSize);
+
+              $("#display").css("font-size", fontSize );
+            }
+            console.log(input);
           if (input) 
           {
+            let data = $("#display").val();
             result  = $("#preview").text();
             if (data !== "") 
             {
@@ -325,27 +335,31 @@
             $("#display").val("");
             $("#preview").text("");
             input = false;
+            $("#preview").css({"font-weight": "300", "font-size": "28px"});
+            $("#display").css("font-size", "42px");
           }
-          $("#preview").css({"font-weight": "300", "font-size": "28px"});
-          $("#display").css("font-size", "42px");
           let buttonValue = $(this).html();
           let currentDisplayValue = $("#display").val();
-
-          if (buttonValue === "." && data.indexOf(".") === -1) 
-          {
-            data += ".";
-            updatePreview();
+          if(buttonValue === "%" && currentDisplayValue !== ""){
+            const lastChar = currentDisplayValue.slice(-1);
+            if (lastChar === "%")
+            {
+              $("#display").val(currentDisplayValue.slice(0, -1) + buttonValue);
+            }
           }
 
           if ($(this).hasClass("oprator") && currentDisplayValue !== "") 
           {
-            const lastChar = currentDisplayValue.slice(-1);
-            if (lastChar === "+" || lastChar === "-" || lastChar === "x" || lastChar === "/") 
+            if($(this).hasClass("oprator"))
             {
-              $("#display").val(currentDisplayValue.slice(0, -1) + buttonValue);
-            } else 
-            {
-              $("#display").val(currentDisplayValue + buttonValue);
+              const lastChar = currentDisplayValue.slice(-1);
+              if (lastChar === "+" || lastChar === "-" || lastChar === "x" || lastChar === "/" || lastChar === ".") 
+              {
+                $("#display").val(currentDisplayValue.slice(0, -1) + buttonValue);
+              } else 
+              {
+                $("#display").val(currentDisplayValue + buttonValue);
+              }
             }
           } else 
           {
@@ -358,7 +372,6 @@
         {
           data = $("#display").val().slice(0, - 1)
           $("#display").val(data);
-
           updatePreview();
         });
 
