@@ -278,13 +278,13 @@
             }
           }
         }
-
+        
         $("#calculate").click(function () 
         {
           let data = $('#display').val();
           if (data.trim() !== "") 
           {
-            $("#display").css("font-size", "42px");
+            $("#display").css("font-size", "32px");
             $("#preview").css({ "font-size": "42px", "font-weight": "500" });
             updatePreview();    
             if ($("#display").val().trim() === "") 
@@ -301,42 +301,58 @@
           updatePreview();
         });
 
-          $("#display").on("input, click", function(){
-            if($("#display").val().length > 8){
-              fontSize = "42px";
-              $("#display").css("font-size", fontSize);
-            }
-          });
+        $("#display").on("input", function(){
+          let inputValue = $(this).val()
+          let regex = /^[0-9+\-*\/x.%]*$/;
+          if (!regex.test(inputValue)) {
+            inputValue = inputValue.slice(0, -1);
+            $(this).val(inputValue);
+          }
+          let checkNum = /\d/g.test($("#display").val())
+          if (checkNum) {
+            
+          }
+          if (inputValue.length > 8) {
+            let fontSize = "42px";
+            $(this).css("font-size", fontSize);
+          }
+          updatePreview();
+        });
 
         $(".calc-btn").on("click", function () 
         {
+          let data = $("#display").val();     
+          let filterNumber = /[+\-\/x\.]$/.test(data)
+          let num = /^\d/.test(data)
+          console.log(filterNumber);
+          $("#calculate").prop("disabled", !num)
           console.log($("#display").val().length);
-          if($("#display").val().length > 7){
-              fontSize = "32px";
-              console.log(fontSize);
-
-              $("#display").css("font-size", fontSize );
-            }else if($("#display").val().length > 11){
-              fontSize = "32px";
-              console.log(fontSize);
-
-              $("#display").css("font-size", fontSize );
-            }
-            console.log(input);
+          if($("#display").val().length > 7)
+          {
+            $("#display").css("font-size", "32px");
+          }
+          if($("#display").val().length >= 11)
+          {
+            $("#display").css("font-size", "22px");
+          }
+          if($("#display").val().length >= 16)
+          {
+            $("#display").css("font-size", "12px");
+          }
+          console.log(input);
           if (input) 
           {
-            let data = $("#display").val();
             result  = $("#preview").text();
             if (data !== "") 
             {
-              $(".history-calc").append("<div class='historycal'><h3 class='summation text-light'>" + (data.includes("*") ? data.replace("*", "x") : data) +
-                "</h3><p class='result text-light'>" + result + "</p></div><hr class='hr text-white'>");
+              $(".history-calc").append("<div class='historycal'><h3 class='summation text-light'>" + (data.includes("*") ? data.replace("*", "x").substring(0, 12) : data.substring(0, 12)) +
+                "</h3><p class='result text-light'>" + result.substring(0, 12) + "</p></div><hr class='hr text-white'>");
             }
             $("#display").val("");
             $("#preview").text("");
-            input = false;
             $("#preview").css({"font-weight": "300", "font-size": "28px"});
             $("#display").css("font-size", "42px");
+            input = false;
           }
           let buttonValue = $(this).html();
           let currentDisplayValue = $("#display").val();
@@ -347,22 +363,24 @@
               $("#display").val(currentDisplayValue.slice(0, -1) + buttonValue);
             }
           }
-
-          if ($(this).hasClass("oprator") && currentDisplayValue !== "") 
+          let inputOprator = /^[+\-*\/x.%]/.test(data);
+          if (inputOprator){
+            data = $("#display").val().slice(0, - 1)
+            $("#display").val(data);
+          }
+          if (filterNumber  && $(this).hasClass("oprator")) 
           {
-            if($(this).hasClass("oprator"))
+            const lastChar = currentDisplayValue.slice(-1);
+            if (lastChar === "+" || lastChar === "-" || lastChar === "x" || lastChar === "/" || lastChar === ".") 
             {
-              const lastChar = currentDisplayValue.slice(-1);
-              if (lastChar === "+" || lastChar === "-" || lastChar === "x" || lastChar === "/" || lastChar === ".") 
-              {
-                $("#display").val(currentDisplayValue.slice(0, -1) + buttonValue);
-              } else 
-              {
-                $("#display").val(currentDisplayValue + buttonValue);
-              }
+              $("#display").val(currentDisplayValue.slice(0, -1) + buttonValue);
+            } else 
+            {
+              $("#display").val(currentDisplayValue + buttonValue);
             }
-          } else 
+          } else
           {
+            console.log("else masuk");
            $("#display").val(currentDisplayValue + buttonValue);
           }
           updatePreview();
